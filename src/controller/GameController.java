@@ -29,6 +29,7 @@ public class GameController {
             Hand hand = createHand();
             assignDecksAndHandAndToPlayers(player,deck,hand);
             createCards(player.deck);
+            player.deck.shuffle();
             player.hand.populateHand(deck);
             list.add(player);
         }
@@ -87,12 +88,8 @@ public class GameController {
         activePlayer = tempPlayer;
     }
 
-    private boolean checkIfActivePlayerHumanOrAi(){
-        return activePlayer.isHuman();
-    }
-
     private void startMenu(Player activePlayer, Player passivePlayer, Field field){
-        if(checkIfActivePlayerHumanOrAi()){
+        if(activePlayer.isHuman()){
             Menu.humanMenu(activePlayer,passivePlayer, field);
         } else activePlayer.menu.aiMenu();
     }
