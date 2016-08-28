@@ -78,10 +78,6 @@ public class GameController {
         passivePlayer.hand.getOneCardFromDeck(passivePlayer);
     }
 
-    private void endTurn(){
-
-    }
-
     private void changeActivePlayers(){
         Player tempPlayer = passivePlayer;
         passivePlayer = activePlayer;
@@ -91,7 +87,7 @@ public class GameController {
     private void startMenu(Player activePlayer, Player passivePlayer, Field field){
         if(activePlayer.isHuman()){
             Menu.humanMenu(activePlayer,passivePlayer, field);
-        } else activePlayer.menu.aiMenu();
+        } else activePlayer.menu.aiMenu(activePlayer, passivePlayer, field);
     }
 
     private void createField(){
@@ -100,6 +96,10 @@ public class GameController {
 
     private static void createCards(Deck deck){
         CardBuilder.builder(deck);
+    }
+
+    private void endTurn(){
+        //to be continued.
     }
 
 }

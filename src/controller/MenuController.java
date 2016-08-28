@@ -10,6 +10,8 @@ import java.util.Scanner;
  */
 public class MenuController {
 
+    enum fields {boardField, playerHand};
+
     public static void controller(int option, Player activePlayer, Player passivePlayer, Field field){
 
         if(option == 1){
@@ -25,7 +27,6 @@ public class MenuController {
         System.out.println("Current Mana: " + activePlayer.getTempMana());
         System.out.println("Currently you have in your hand following cards");
         activePlayer.hand.showHand();
-        System.out.println("Select card to play");
         PlayCardFromHand(activePlayer, field);
     }
 
@@ -36,26 +37,36 @@ public class MenuController {
     }
 
     private static void PlayCardFromHand(Player activePlayer, Field field){
-        Minion tempCard = (Minion) activePlayer.hand.returnCardFromHand(scanner()-1);
+        Minion tempCard = (Minion) activePlayer.hand.checkCardInHand(scannerValidator("field", activePlayer, field));
         if(activePlayer.isHuman() && checkThatPlayerHaveEnoughManaForCard(activePlayer, tempCard)){
             field.playerPutCardOnField(tempCard);
+            activePlayer.hand.removeCardFromHand(tempCard);
+            activePlayer.modifyTempMana(tempCard.getMana());
+            announceCard(tempCard);
         } else if (!activePlayer.isHuman() && checkThatPlayerHaveEnoughManaForCard(activePlayer, tempCard)){
             field.aiPutCardOnField(tempCard);
+            activePlayer.hand.removeCardFromHand(tempCard);
+            activePlayer.modifyTempMana(tempCard.getMana());
+            announceCard(tempCard);
         }
-        System.out.println("Now on the field there is - " + tempCard.getName() + " | Health: " + tempCard.getHealth() + " ,Strenght: " + tempCard.getPower());
-
     }
 
     private static int scanner(){
-        
-
         Scanner scanner = new Scanner(System.in);
-        int number = scanner.nextInt();
-        return number;
+        int number;
+        do{
+            System.out.println("Enter positive number");
+            while(!scanner.hasNextInt()){
+                System.out.println("That's not a correct number!");
+                scanner.next();
+            }
+            number = scanner.nextInt();
+        }while (number <= 0);
+        return number-1;
     }
 
-    private static boolean  checkThatPlayerHaveEnoughManaForCard(Player activePlayer, Card card){
-        if(card.getMana() <= activePlayer.getTempMana()){
+    private static boolean  checkThatPlayerHaveEnoughManaForCard(Player activePlayer, Minion card){
+        if(activePlayer.getTempMana() >= card.getMana()){
             return true;
         }
         System.out.println("You don't have enough mana to play this card. Current mana: " + activePlayer.getTempMana() + " < Card mana: " + card.getMana());
@@ -77,6 +88,22 @@ public class MenuController {
         }
     }
 
+    private static void announceCard(Minion tempCard){
+        System.out.println("Now on the field there is - " + tempCard.getName() + " | Health: " + tempCard.getHealth() + " ,Strenght: " + tempCard.getPower());
+    }
 
+    private static int scannerValidator(String checkValue, Player activePlayer, Field field){
+        int number = scanner();
+        if(checkValue.equals("field")){
+            if((field.returnFieldSize(activePlayer) >= 0) && (field.returnFieldSize(activePlayer) >= number)){
+                return number;
+            }
+        }else if(checkValue.equals("hand")){
+            if((activePlayer.hand.returnHandCardsNumber() >= 0) && (activePlayer.hand.returnHandCardsNumber() >= number)){
+                return number;
+            }
+        }
+        return -1;
+    }
 
 }
