@@ -19,14 +19,16 @@ public class Field {
 
     public void aiPutCardOnField(Minion card){
         aiField.add(card);
+        putNewlyPlayedCardToFatigue(card);
     }
 
     public void playerPutCardOnField(Minion card){
         playerField.add(card);
+        putNewlyPlayedCardToFatigue(card);
     }
 
-    public void clearCardsFatgue(int field){
-        if(field==1){
+    public void clearCardsFatgue(Player activePlayer){
+        if(activePlayer.isHuman()){
             for (int i=0;i<playerField.size();i++){
                 Minion minion = (Minion) playerField.get(i);
                 minion.setFatigue(false);
@@ -41,6 +43,35 @@ public class Field {
 
     public boolean checkIfFieldEmpty(){
         return playerField.size() <= 0;
+    }
+
+    private void putNewlyPlayedCardToFatigue(Minion minion){
+        minion.setFatigue(true);
+    }
+
+    public void showCardsOnTheField(Player activePlayer){
+        if(activePlayer.isHuman()){
+            for(int i=0;i<playerField.size();i++){
+                Minion temp = (Minion) playerField.get(i);
+                System.out.println((i + 1) + ". " + temp.getName() + " | Strength: " + temp.getPower() + " , Health: " + temp.getHealth() + " , Mana: " + temp.getMana());
+            }
+        }
+    }
+
+    public Card returnCardFromField (Player activePlayer, int cardNumber){
+        if(activePlayer.isHuman()){
+            return playerField.get(cardNumber);
+        }
+        return aiField.get(cardNumber);
+    }
+
+    public int returnFieldSize(Player activePlayer){
+        if(activePlayer.isHuman() && !(playerField.size() < 0)){
+            return playerField.size();
+        } else if (!activePlayer.isHuman() && !(playerField.size() < 0)){
+            return aiField.size();
+        }
+        return -1;
     }
 }
 

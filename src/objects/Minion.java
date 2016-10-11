@@ -45,6 +45,10 @@ public class Minion extends Card {
         isDead = dead;
     }
 
+    public void combat(Minion attack){
+
+    }
+
     @Override
     public String toString() {
         return super.toString() + " Strength: " + power + " Health: " + health;

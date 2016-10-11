@@ -30,7 +30,7 @@ public class Hand {
     }
 
     public boolean checkHand(){
-        return myHand.size() > 1;
+        return myHand.size() >= 0;
     }
 
     public void showHand(){
@@ -40,9 +40,30 @@ public class Hand {
         }
     }
 
-    public Card takeCardFromHand(int cardNumber){
-        Card card = myHand.get(cardNumber);
-        myHand.remove(cardNumber);
-        return card;
+    public void removeCardFromHand(Card card){
+        for(int i=0;i<myHand.size();i++){
+            Card tempCard = myHand.get(i);
+            if(card.getId() == tempCard.getId()){
+                myHand.remove(i);
+            }
+        }
+    }
+
+    public Card checkCardInHand(int cardNumber){
+        return myHand.get(cardNumber);
+    }
+
+    public int returnHandCardsNumber(){
+        if(myHand.size() >= 0){
+            int number = myHand.size();
+            System.out.println("You have " + number + " cards in your hand");
+            return myHand.size();
+        } else {
+            return -1;
+        }
+    }
+
+    public int returnHandSize (){
+        return myHand.size();
     }
 }

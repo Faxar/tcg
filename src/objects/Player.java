@@ -20,6 +20,7 @@ public class Player {
 
     public Player(boolean isHuman) {
         this.mana = 1;
+        this.tempMana = mana;
         this.health = startingHealth;
         this.isHuman = isHuman;
         this.fatigueCounter = 0;
@@ -29,12 +30,11 @@ public class Player {
         return mana;
     }
 
-    public void setMana(int mana) {
-        if(mana + this.mana <= maximumMana){
-            this.mana = mana;
-            this.tempMana = mana;
+    public void increaseManaTurn(){
+        if(mana < 10){
+            mana =+1;
+            tempMana = mana;
         }
-
     }
 
     public int getTempMana() {
@@ -60,5 +60,13 @@ public class Player {
 
     public void dealDamage(int damage){
         this.health = health - damage;
+    }
+
+    public void modifyTempMana(int number){
+        this.tempMana = tempMana - number;
+    }
+
+    public void setAsAI(){
+        isHuman = false;
     }
 }

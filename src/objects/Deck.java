@@ -1,5 +1,6 @@
 package objects;
 
+import java.util.Collections;
 import java.util.Stack;
 
 /**
@@ -27,5 +28,9 @@ public class Deck {
 
     public void populateDeck(Card card) {
         myDeck.push(card);
+    }
+
+    public void shuffle(){
+        Collections.shuffle(myDeck);
     }
 }
