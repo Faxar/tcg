@@ -36,6 +36,7 @@ public class GameController {
         createField();
         randomStartPlayer(list);
         givePassivePlayerAdditionalCard();
+        setOnePlayerAsAI(list);
         Game();
 
     }
@@ -45,7 +46,6 @@ public class GameController {
             activePlayer.hand.getOneCardFromDeck(activePlayer);
             startMenu(activePlayer, passivePlayer, field);
             endTurn();
-            changeActivePlayers();
         }
     }
 
@@ -69,8 +69,10 @@ public class GameController {
     private void randomStartPlayer(ArrayList listOfPlayers){
         Random randomGenerator = new Random();
         int randomNumber = randomGenerator.nextInt(1);
+        System.out.println(listOfPlayers.size());
         activePlayer = (Player) listOfPlayers.get(randomNumber);
         listOfPlayers.remove(randomNumber);
+        System.out.println(listOfPlayers.size());
         passivePlayer = (Player) listOfPlayers.get(0);
     }
 
@@ -80,14 +82,16 @@ public class GameController {
 
     private void changeActivePlayers(){
         Player tempPlayer = passivePlayer;
-        passivePlayer = activePlayer;
-        activePlayer = tempPlayer;
+        System.out.println(tempPlayer.isHuman());
+        this.passivePlayer = this.activePlayer;
+        this.activePlayer = tempPlayer;
+        System.out.println(activePlayer.isHuman());
     }
 
     private void startMenu(Player activePlayer, Player passivePlayer, Field field){
         if(activePlayer.isHuman()){
             Menu.humanMenu(activePlayer,passivePlayer, field);
-        } else activePlayer.menu.aiMenu(activePlayer, passivePlayer, field);
+        } else Menu.aiMenu (activePlayer, passivePlayer, field);
     }
 
     private void createField(){
@@ -99,7 +103,16 @@ public class GameController {
     }
 
     private void endTurn(){
-        //to be continued.
+        System.out.println("turn ended");
+        changeActivePlayers();
+        field.clearCardsFatgue(activePlayer);
+        activePlayer.increaseManaTurn();
+    }
+
+    private void setOnePlayerAsAI(ArrayList<Player> player){
+        Random random = new Random();
+        int randomNumber = random.nextInt(1);
+        player.get(randomNumber).setAsAI();
     }
 
 }

@@ -10,8 +10,6 @@ import java.util.Scanner;
  */
 public class MenuController {
 
-    enum fields {boardField, playerHand};
-
     public static void controller(int option, Player activePlayer, Player passivePlayer, Field field){
 
         if(option == 1){
@@ -19,6 +17,7 @@ public class MenuController {
         } else if (option == 2){
             playCardOnTheField(activePlayer, field);
         } else if (option == 3){
+            System.out.println("end turn pressed");
             Menu.endTurn();
         }
     }
@@ -83,7 +82,7 @@ public class MenuController {
 
     private static void attackWithTheCard (Player activePlayer, Field field){
         if(activePlayer.isHuman()){
-            Minion attackCard = (Minion) field.returnCardFromField(activePlayer, scanner()-1);
+            Minion attackCard = (Minion) field.returnCardFromField(activePlayer, scanner());
             checkIfCardIsFatuguedOnTheField(attackCard);
         }
     }
@@ -93,17 +92,18 @@ public class MenuController {
     }
 
     private static int scannerValidator(String checkValue, Player activePlayer, Field field){
-        int number = scanner();
-        if(checkValue.equals("field")){
-            if((field.returnFieldSize(activePlayer) >= 0) && (field.returnFieldSize(activePlayer) >= number)){
-                return number;
+        while (true){
+            int number = scanner();
+            if(checkValue.equals("field")){
+                if((field.returnFieldSize(activePlayer) >= 0) && (activePlayer.hand.returnHandCardsNumber() >= number)){
+                    return number;
+                }
+            }else if(checkValue.equals("hand")){
+                if((activePlayer.hand.returnHandCardsNumber() >= 0) && (activePlayer.hand.returnHandCardsNumber() >= number)){
+                    return number;
+                }
             }
-        }else if(checkValue.equals("hand")){
-            if((activePlayer.hand.returnHandCardsNumber() >= 0) && (activePlayer.hand.returnHandCardsNumber() >= number)){
-                return number;
-            }
+            System.out.println("Please enter correct number range");
         }
-        return -1;
     }
-
 }

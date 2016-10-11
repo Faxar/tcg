@@ -71,7 +71,6 @@ public class CardBuilder {
 
 
     private static String feedPath(int number){
-        String path = CardBuilder.class.getClassLoader().getResource("").toString();
         if(number == 1){
             return ("src/decks/space.xml");
         } else if (number == 2) {
